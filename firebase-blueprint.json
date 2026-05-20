@@ -1,0 +1,56 @@
+{
+  "entities": {
+    "RaffleConfig": {
+      "title": "RaffleConfig",
+      "description": "Configuration metadata for the active raffle",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the raffle prize" },
+        "description": { "type": "string", "description": "Detailed description of the raffle prize" },
+        "price": { "type": "number", "description": "Cost per raffle number" },
+        "totalNumbers": { "type": "integer", "description": "Total count of numbers in the raffle grid" },
+        "isActive": { "type": "boolean", "description": "Whether the raffle is active and accepting numbers selection" },
+        "imageUrl": { "type": "string", "description": "URL structure for the raffle prize image" }
+      },
+      "required": ["title", "description", "price", "totalNumbers", "isActive"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "An individual order/reservation for numbers in the raffle",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The custom short ID of the order" },
+        "name": { "type": "string", "description": "Name of the participant" },
+        "phone": { "type": "string", "description": "Phone number of the participant" },
+        "nums": { "type": "array", "description": "List of reserved raffle numbers (e.g., ['001', '012'])" },
+        "val": { "type": "number", "description": "Total value of the order" },
+        "status": { "type": "string", "enum": ["Aguardando", "Pago", "Cancelado"], "description": "Current payment and validation status of the order" }
+      },
+      "required": ["id", "name", "phone", "nums", "val", "status"]
+    },
+    "Lock": {
+      "title": "Lock",
+      "description": "A temporary selection lock for a raffle number",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string", "description": "Unique session identifier of the user who locked the number" },
+        "expiresAt": { "type": "integer", "description": "Timestamp in milliseconds when the lock expires" }
+      },
+      "required": ["sessionId", "expiresAt"]
+    }
+  },
+  "firestore": {
+    "/raffle/config": {
+      "schema": "RaffleConfig",
+      "description": "Global config of the raffle"
+    },
+    "/orders/{orderId}": {
+      "schema": "Order",
+      "description": "A collection containing orders submitted by users"
+    },
+    "/locks/{numberId}": {
+      "schema": "Lock",
+      "description": "Collection containing temporary selection locks for numbers"
+    }
+  }
+}

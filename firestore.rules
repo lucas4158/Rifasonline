@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Raffle global configuration path
+    match /raffle/config {
+      allow read, write: if true;
+    }
+    
+    // User orders and reservations path
+    match /orders/{orderId} {
+      allow read, write: if true;
+    }
+
+    // Temporary selection locks
+    match /locks/{numberId} {
+      allow read, write: if true;
+    }
+  }
+}
